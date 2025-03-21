@@ -1,20 +1,24 @@
 import express from "express";
-import dotenv from "dotenv";   
-
+import dotenv from "dotenv"; 
+import cookieParser from "cookie-parser";   
 import authRoutes from "./routes/auth.route.js";
 import { connectDB } from "./lib/db.js";
 
 dotenv.config();
 
+ 
 
 const app = express();
+const PORT = process.env.PORT || 5000; // Default port if .env is missing
+app.use(cookieParser());    
+// Middleware
+app.use(express.json());
 
-const PORT = process.env.PORT ||
+// Routes
+app.use("/api/auth", authRoutes);  // Fixed path from "/app/auth" to "/api/auth"
 
-app.use("/app/auth", authRoutes);
-
-
-app.listen(PORT, ()=>{
-    console.log("server is running on port" + PORT);
+// Start Server
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
     connectDB(); 
 });
